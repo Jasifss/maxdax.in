@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Sparkles,
   Sun,
@@ -10,27 +10,39 @@ import {
   Car,
   ShieldCheck,
   Smartphone,
+  Sliders,
+  CheckCircle2,
+  Tv,
+  Power,
   ChevronRight,
-  Play,
-  RotateCcw
+  Maximize2
 } from 'lucide-react';
 
 export const AmbientLivingJourney: React.FC = () => {
   const [activeArea, setActiveArea] = useState<'living' | 'bedroom' | 'exterior'>('living');
 
-  // Living Room Modes
-  // 'guest' | 'task' | 'discussion' | 'movie'
+  // Living Room Scene Mode
   const [livingMode, setLivingMode] = useState<'guest' | 'task' | 'discussion' | 'movie'>('guest');
 
-  // Bedroom Modes
-  // 'night' | 'morning' | 'reading'
-  const [bedroomMode, setBedroomMode] = useState<'morning' | 'night' | 'reading'>('morning');
+  // Bedroom Scene Mode
+  const [bedroomMode, setBedroomMode] = useState<'morning' | 'reading' | 'night'>('morning');
+
+  // Active control source animation feedback ('wall' | 'phone')
+  const [lastActionSource, setLastActionSource] = useState<'wall' | 'phone'>('wall');
 
   // Exterior Gate Animation State
-  // 'closed' | 'opening' | 'open' | 'transiting' | 'closing'
   const [gateAnimState, setGateAnimState] = useState<'closed' | 'opening' | 'open' | 'transiting' | 'closing'>('closed');
 
-  // Gate automatic sequence trigger
+  const triggerLivingScene = (mode: 'guest' | 'task' | 'discussion' | 'movie', source: 'wall' | 'phone') => {
+    setLivingMode(mode);
+    setLastActionSource(source);
+  };
+
+  const triggerBedroomScene = (mode: 'morning' | 'reading' | 'night', source: 'wall' | 'phone') => {
+    setBedroomMode(mode);
+    setLastActionSource(source);
+  };
+
   const runGateSequence = () => {
     if (gateAnimState !== 'closed') return;
     setGateAnimState('opening');
@@ -43,26 +55,26 @@ export const AmbientLivingJourney: React.FC = () => {
           setTimeout(() => {
             setGateAnimState('closed');
           }, 2500);
-        }, 3000);
+        }, 2800);
       }, 1000);
-    }, 2500);
+    }, 2200);
   };
 
   return (
     <div className="bg-brand-surface border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-      {/* Top Space Switcher Navigation (Living -> Bedroom -> Exterior Gate) */}
-      <div className="bg-slate-950/90 border-b border-slate-800 px-4 sm:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+      {/* Top Space Switcher Navigation */}
+      <div className="bg-slate-950/95 border-b border-slate-800 px-4 sm:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
         <div>
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 block mb-0.5">
-            Ambience Mastery & Automated Storytelling
+            Ambience Mastery &bull; Architectural Storytelling
           </span>
           <h3 className="text-sm sm:text-base font-bold text-white">
-            Experience Living in a MAXDAX Smart Home
+            Interactive Living Space Demonstration
           </h3>
         </div>
 
         {/* Space Selector Tabs */}
-        <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-2xl border border-slate-800">
+        <div className="flex items-center gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
           <button
             type="button"
             onClick={() => setActiveArea('living')}
@@ -72,7 +84,7 @@ export const AmbientLivingJourney: React.FC = () => {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            01. Living Room
+            01. Living Room Space
           </button>
 
           <button
@@ -96,211 +108,393 @@ export const AmbientLivingJourney: React.FC = () => {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            03. Exterior & Gate
+            03. Exterior Villa Gate
           </button>
         </div>
       </div>
 
       {/* Main Interactive Stage */}
-      <div className="relative min-h-[460px] sm:min-h-[520px] bg-black overflow-hidden flex flex-col lg:flex-row items-stretch">
+      <div className="relative min-h-[500px] lg:min-h-[560px] bg-slate-950 flex flex-col xl:flex-row items-stretch overflow-hidden">
         
-        {/* =========================================
-            ROOM 1: LIVING ROOM (AMBIENCE MASTERY)
-           ========================================= */}
+        {/* ====================================================
+            SCENE 1: LUXURY LIVING ROOM INTERIOR
+           ==================================================== */}
         {activeArea === 'living' && (
           <>
-            {/* Visual Room Canvas */}
-            <div className="relative flex-1 min-h-[320px] lg:min-h-full overflow-hidden">
+            {/* Visual Living Room Canvas */}
+            <div className="relative flex-1 min-h-[360px] lg:min-h-[480px] overflow-hidden select-none">
+              {/* Authentic High-End Interior Living Room Photo */}
               <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85"
-                alt="Modern Smart Living Room"
+                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
+                alt="Luxury Modern Living Room Interior"
                 className={`w-full h-full object-cover transition-all duration-1000 ${
                   livingMode === 'guest'
-                    ? 'brightness-[0.88] contrast-[1.05]'
+                    ? 'brightness-[0.92] contrast-[1.08] saturate-[1.15]'
                     : livingMode === 'task'
-                    ? 'brightness-[1.05] contrast-[1.12]'
+                    ? 'brightness-[1.12] contrast-[1.15] saturate-[1.0]'
                     : livingMode === 'discussion'
-                    ? 'brightness-[0.70] contrast-[1.15]'
-                    : 'brightness-[0.45] contrast-[1.25]' // Movie mode
+                    ? 'brightness-[0.75] contrast-[1.18] saturate-[1.2]'
+                    : 'brightness-[0.42] contrast-[1.3] saturate-[0.9]' // Movie Mode
                 }`}
               />
 
-              {/* Dynamic Lighting Overlay */}
+              {/* Dynamic Atmospheric Lighting Glow Overlay */}
               <div
                 className="absolute inset-0 transition-all duration-1000 pointer-events-none"
                 style={{
                   backgroundColor:
                     livingMode === 'guest'
-                      ? 'rgba(217, 119, 6, 0.15)' // Warm golden amber
+                      ? 'rgba(245, 158, 11, 0.16)' // Warm golden amber 2700K
                       : livingMode === 'task'
-                      ? 'rgba(255, 255, 255, 0.08)' // Crisp daylight white
+                      ? 'rgba(240, 249, 255, 0.08)' // Crisp daylight white 4500K
                       : livingMode === 'discussion'
-                      ? 'rgba(180, 83, 9, 0.22)' // Intimate warm recessed
-                      : 'rgba(2, 132, 199, 0.25)', // Movie night deep azure
-                  boxShadow:
-                    livingMode === 'movie'
-                      ? 'inset 0 0 150px rgba(0,0,0,0.9)'
-                      : 'none'
+                      ? 'rgba(217, 119, 6, 0.24)' // Intimate warm recessed cove 2400K
+                      : 'rgba(30, 58, 138, 0.35)', // Deep cinematic indigo for Movie Night
+                  mixBlendMode: 'screen'
                 }}
               ></div>
 
-              {/* Simulated Motorized Window Drapes Effect */}
+              {/* Ceiling Cove Lighting Strip (Glows based on Mode) */}
               <div
-                className="absolute top-0 bottom-0 right-0 bg-slate-950/90 transition-all duration-1000 ease-in-out border-l border-slate-700/50 shadow-2xl flex items-center justify-center pointer-events-none"
+                className="absolute top-0 inset-x-0 h-10 transition-all duration-1000 pointer-events-none blur-md"
                 style={{
-                  width:
-                    livingMode === 'movie'
-                      ? '70%' // Blinds closed for cinema
+                  backgroundColor:
+                    livingMode === 'guest'
+                      ? 'rgba(251, 191, 36, 0.45)'
+                      : livingMode === 'task'
+                      ? 'rgba(255, 255, 255, 0.35)'
                       : livingMode === 'discussion'
-                      ? '40%'
-                      : livingMode === 'guest'
-                      ? '25%'
-                      : '8%' // Task mode blinds fully open
+                      ? 'rgba(245, 158, 11, 0.35)'
+                      : 'rgba(56, 189, 248, 0.65)' // Glowing Cyan/Indigo Cove in Movie Mode
                 }}
-              >
-                {livingMode === 'movie' && (
-                  <span className="text-[10px] font-mono font-bold text-slate-400 rotate-90 tracking-widest uppercase">
-                    BLACKOUT DRAPES CLOSED (100%)
+              ></div>
+
+              {/* Floor Lamp & Recessed Spotlight Radial Beam */}
+              <div
+                className="absolute top-1/4 left-1/3 w-80 h-80 rounded-full transition-all duration-1000 pointer-events-none blur-3xl"
+                style={{
+                  backgroundColor:
+                    livingMode === 'guest'
+                      ? 'rgba(245, 158, 11, 0.25)'
+                      : livingMode === 'task'
+                      ? 'rgba(255, 255, 255, 0.18)'
+                      : livingMode === 'discussion'
+                      ? 'rgba(217, 119, 6, 0.28)'
+                      : 'rgba(14, 165, 233, 0.15)'
+                }}
+              ></div>
+
+              {/* ====================================================
+                  REALISTIC ARCHITECTURAL WINDOW WITH MOTORIZED CURTAINS
+                  Positioned precisely where the window opening exists!
+                 ==================================================== */}
+              <div className="absolute top-4 bottom-12 right-4 w-72 sm:w-96 rounded-2xl overflow-hidden border-2 border-slate-700/60 shadow-2xl pointer-events-none z-10 flex">
+                {/* Window Exterior View (Day / Twilight / Night View through the glass) */}
+                <div className="absolute inset-0 z-0">
+                  <img
+                    src={
+                      livingMode === 'task'
+                        ? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80' // Bright daylight view
+                        : livingMode === 'movie'
+                        ? 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=800&q=80' // Night stars view
+                        : 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80' // Warm sunset view
+                    }
+                    alt="Window Exterior Landscape"
+                    className="w-full h-full object-cover transition-all duration-1000"
+                  />
+                  <div className="absolute inset-0 bg-slate-950/20"></div>
+                </div>
+
+                {/* Motorized Curtain Track Top Housing */}
+                <div className="absolute top-0 inset-x-0 h-4 bg-slate-900 border-b border-slate-700 z-30 flex items-center justify-between px-2 text-[8px] font-mono text-slate-400">
+                  <span>SOMFY 24V MOTOR TRACK</span>
+                  <span className="text-emerald-400">
+                    {livingMode === 'movie' ? 'CLOSED 100%' : livingMode === 'discussion' ? '50%' : livingMode === 'guest' ? '25%' : 'OPEN 0%'}
                   </span>
+                </div>
+
+                {/* Left Motorized Curtain Drape (Pleated Fabric) */}
+                <div
+                  className="h-full bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 border-r border-stone-700/80 shadow-2xl transition-all duration-1000 ease-in-out relative z-20 flex justify-evenly"
+                  style={{
+                    width:
+                      livingMode === 'movie'
+                        ? '50%' // Fully closed together in middle
+                        : livingMode === 'discussion'
+                        ? '25%'
+                        : livingMode === 'guest'
+                        ? '15%'
+                        : '6%' // Task mode pulled back to edges
+                  }}
+                >
+                  {/* Fabric Pleat Lines */}
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="w-0.5 h-full bg-stone-950/70 opacity-60"></div>
+                  ))}
+                </div>
+
+                {/* Right Motorized Curtain Drape (Pleated Fabric) */}
+                <div
+                  className="h-full ml-auto bg-gradient-to-l from-stone-900 via-stone-800 to-stone-900 border-l border-stone-700/80 shadow-2xl transition-all duration-1000 ease-in-out relative z-20 flex justify-evenly"
+                  style={{
+                    width:
+                      livingMode === 'movie'
+                        ? '50%' // Fully closed together in middle
+                        : livingMode === 'discussion'
+                        ? '25%'
+                        : livingMode === 'guest'
+                        ? '15%'
+                        : '6%'
+                  }}
+                >
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="w-0.5 h-full bg-stone-950/70 opacity-60"></div>
+                  ))}
+                </div>
+
+                {/* Center Badge when Curtains are closing/closed */}
+                {livingMode === 'movie' && (
+                  <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none animate-in fade-in duration-700">
+                    <div className="bg-slate-950/90 border border-slate-700 px-3 py-1.5 rounded-lg text-center backdrop-blur shadow-2xl">
+                      <div className="text-[10px] font-mono font-bold text-sky-400 uppercase">
+                        Blackout Drapes Closed
+                      </div>
+                      <div className="text-[9px] text-slate-300">Cinema Room Isolation</div>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              {/* Live Room Status Badge */}
-              <div className="absolute bottom-5 left-5 bg-slate-950/85 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <div>
-                  <div className="text-[10px] font-mono font-bold text-sky-400 uppercase">
-                    ACTIVE ATMOSPHERE
-                  </div>
-                  <div className="text-xs font-bold text-white">
-                    {livingMode === 'guest' && 'Guest Mode &bull; Warm Luxury Lighting & Relaxed Curtains'}
-                    {livingMode === 'task' && 'Task Mode &bull; 4500K Focused White Daylight & Open View'}
-                    {livingMode === 'discussion' && 'Discussion Mode &bull; Soft Accent Cove Ambience'}
-                    {livingMode === 'movie' && 'Movie Night &bull; Ambient Backlight & Motorized Blackouts'}
-                  </div>
+              {/* Active Room Atmosphere Overlay Badge */}
+              <div className="absolute bottom-4 left-4 z-20 bg-slate-950/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-2xl">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="text-[10px] font-mono font-bold text-sky-400 uppercase">
+                    LIVING ROOM &bull; SCENE ORCHESTRATION
+                  </span>
+                </div>
+                <div className="text-xs sm:text-sm font-bold text-white">
+                  {livingMode === 'guest' && 'Guest Mode &bull; Warm 2700K Amber Glow & 75% Window View'}
+                  {livingMode === 'task' && 'Task Mode &bull; 4500K Focused White Daylight & Drapes Open'}
+                  {livingMode === 'discussion' && 'Discussion Mode &bull; Soft Accent Cove Ambience'}
+                  {livingMode === 'movie' && 'Movie Night &bull; Backlit Azure Glow & Motorized Blackouts Closed'}
+                </div>
+                <div className="text-[10px] text-slate-400 mt-1 font-mono">
+                  Triggered via: {lastActionSource === 'wall' ? 'Wall Smart Glass Switch' : 'MAXDAX Mobile App'}
                 </div>
               </div>
             </div>
 
-            {/* Sleek Mobile Phone App Controller */}
-            <div className="w-full lg:w-96 bg-brand-surface border-t lg:border-t-0 lg:border-l border-slate-800 p-6 flex flex-col justify-center">
-              <div className="max-w-xs mx-auto w-full">
-                {/* Mobile Phone Mockup Frame */}
-                <div className="bg-slate-950 border-4 border-slate-800 rounded-[36px] p-5 shadow-2xl relative">
-                  {/* Phone Speaker Notch */}
-                  <div className="w-16 h-3 bg-slate-800 rounded-full mx-auto mb-4"></div>
+            {/* ====================================================
+                DUAL CONTROLLER CONSOLE (WALL SWITCH + SMARTPHONE)
+               ==================================================== */}
+            <div className="w-full xl:w-[480px] bg-brand-surface border-t xl:border-t-0 xl:border-l border-slate-800 p-5 sm:p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                  <div>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider block">
+                      Synchronized Dual Controls
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      Operate from the wall touch plate or virtual smartphone:
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">
+                    RF / ZIGBEE 3.0
+                  </span>
+                </div>
 
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800/80">
-                    <div className="flex items-center gap-1.5">
-                      <Smartphone className="w-4 h-4 text-sky-400" />
-                      <span className="text-xs font-bold text-white font-mono">MAXDAX Living</span>
+                {/* Control Panel Grid: Wall Switch Panel + Mobile App Side-by-Side */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  
+                  {/* 1. ARCHITECTURAL SMART GLASS WALL TOUCH SWITCH */}
+                  <div className="bg-slate-950 border-2 border-slate-700/80 rounded-2xl p-3.5 shadow-xl flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800">
+                        <span className="text-[10px] font-mono font-bold text-slate-300 uppercase">
+                          Wall Touch Panel
+                        </span>
+                        <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                      </div>
+                      <p className="text-[10px] text-slate-400 mb-2.5">
+                        Capacitive Glass Keypad:
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('guest', 'wall')}
+                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                            livingMode === 'guest'
+                              ? 'bg-amber-950 border-amber-400 text-amber-200 shadow-lg ring-1 ring-amber-400'
+                              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          }`}
+                        >
+                          <Users className="w-4 h-4 mx-auto mb-1 text-amber-400" />
+                          <div className="text-[10px] font-bold">Guest</div>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('task', 'wall')}
+                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                            livingMode === 'task'
+                              ? 'bg-sky-950 border-sky-400 text-sky-200 shadow-lg ring-1 ring-sky-400'
+                              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          }`}
+                        >
+                          <Briefcase className="w-4 h-4 mx-auto mb-1 text-sky-400" />
+                          <div className="text-[10px] font-bold">Task</div>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('discussion', 'wall')}
+                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                            livingMode === 'discussion'
+                              ? 'bg-amber-950 border-amber-500 text-amber-200 shadow-lg ring-1 ring-amber-500'
+                              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          }`}
+                        >
+                          <Coffee className="w-4 h-4 mx-auto mb-1 text-amber-500" />
+                          <div className="text-[10px] font-bold">Relax</div>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('movie', 'wall')}
+                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                            livingMode === 'movie'
+                              ? 'bg-indigo-950 border-indigo-400 text-indigo-200 shadow-lg ring-1 ring-indigo-400'
+                              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          }`}
+                        >
+                          <Film className="w-4 h-4 mx-auto mb-1 text-indigo-400" />
+                          <div className="text-[10px] font-bold">Cinema</div>
+                        </button>
+                      </div>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400">CONNECT OK</span>
+
+                    <div className="text-[9px] font-mono text-slate-500 mt-3 pt-2 border-t border-slate-900 text-center">
+                      Haptic Feedback &bull; Backlit LED
+                    </div>
                   </div>
 
-                  <p className="text-[11px] text-slate-400 mb-3">
-                    Tap a mode to instantly transform the room's lighting and curtains:
-                  </p>
-
-                  {/* Mode Buttons */}
-                  <div className="space-y-2">
-                    <button
-                      type="button"
-                      onClick={() => setLivingMode('guest')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        livingMode === 'guest'
-                          ? 'bg-amber-950/80 border-amber-500 text-amber-200 shadow-lg ring-1 ring-amber-400/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Users className={`w-4 h-4 ${livingMode === 'guest' ? 'text-amber-400' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Guest Mode</div>
-                          <div className="text-[10px] text-slate-400">Warm 2700K &bull; 70% Curtains</div>
+                  {/* 2. SMARTPHONE APP CONTROLLER */}
+                  <div className="bg-slate-950 border-2 border-slate-700/80 rounded-2xl p-3.5 shadow-xl flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-800">
+                        <div className="flex items-center gap-1">
+                          <Smartphone className="w-3.5 h-3.5 text-sky-400" />
+                          <span className="text-[10px] font-mono font-bold text-slate-300 uppercase">
+                            MAXDAX App
+                          </span>
                         </div>
+                        <span className="text-[9px] font-mono text-emerald-400">ONLINE</span>
                       </div>
-                      {livingMode === 'guest' && <span className="w-2 h-2 rounded-full bg-amber-400"></span>}
-                    </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setLivingMode('task')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        livingMode === 'task'
-                          ? 'bg-sky-950/80 border-sky-400 text-sky-200 shadow-lg ring-1 ring-sky-400/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Briefcase className={`w-4 h-4 ${livingMode === 'task' ? 'text-sky-400' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Task Mode</div>
-                          <div className="text-[10px] text-slate-400">Crisp Daylight &bull; Blinds Open</div>
-                        </div>
-                      </div>
-                      {livingMode === 'task' && <span className="w-2 h-2 rounded-full bg-sky-400"></span>}
-                    </button>
+                      <div className="space-y-1.5">
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('guest', 'phone')}
+                          className={`w-full px-2.5 py-1.5 rounded-lg border text-left flex items-center justify-between text-xs transition-all ${
+                            livingMode === 'guest'
+                              ? 'bg-amber-950/80 border-amber-400 text-amber-200 font-bold'
+                              : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                          }`}
+                        >
+                          <span>Guest Ambiance</span>
+                          <span className="text-[9px] font-mono text-amber-400">2700K</span>
+                        </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setLivingMode('discussion')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        livingMode === 'discussion'
-                          ? 'bg-amber-950/60 border-amber-600 text-amber-200 shadow-lg ring-1 ring-amber-500/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Coffee className={`w-4 h-4 ${livingMode === 'discussion' ? 'text-amber-500' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Discussion Mode</div>
-                          <div className="text-[10px] text-slate-400">Soft Recessed Cove Ambience</div>
-                        </div>
-                      </div>
-                      {livingMode === 'discussion' && <span className="w-2 h-2 rounded-full bg-amber-500"></span>}
-                    </button>
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('task', 'phone')}
+                          className={`w-full px-2.5 py-1.5 rounded-lg border text-left flex items-center justify-between text-xs transition-all ${
+                            livingMode === 'task'
+                              ? 'bg-sky-950/80 border-sky-400 text-sky-200 font-bold'
+                              : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                          }`}
+                        >
+                          <span>Daylight Task</span>
+                          <span className="text-[9px] font-mono text-sky-400">4500K</span>
+                        </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setLivingMode('movie')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        livingMode === 'movie'
-                          ? 'bg-indigo-950/80 border-indigo-500 text-indigo-200 shadow-lg ring-1 ring-indigo-400/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Film className={`w-4 h-4 ${livingMode === 'movie' ? 'text-indigo-400' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Movie Night</div>
-                          <div className="text-[10px] text-slate-400">Cinematic Glow &bull; Blackouts Closed</div>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('discussion', 'phone')}
+                          className={`w-full px-2.5 py-1.5 rounded-lg border text-left flex items-center justify-between text-xs transition-all ${
+                            livingMode === 'discussion'
+                              ? 'bg-amber-950/80 border-amber-500 text-amber-200 font-bold'
+                              : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                          }`}
+                        >
+                          <span>Discussion Mood</span>
+                          <span className="text-[9px] font-mono text-amber-500">Cove</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => triggerLivingScene('movie', 'phone')}
+                          className={`w-full px-2.5 py-1.5 rounded-lg border text-left flex items-center justify-between text-xs transition-all ${
+                            livingMode === 'movie'
+                              ? 'bg-indigo-950/80 border-indigo-400 text-indigo-200 font-bold'
+                              : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                          }`}
+                        >
+                          <span>Movie Night</span>
+                          <span className="text-[9px] font-mono text-indigo-400">Blackout</span>
+                        </button>
                       </div>
-                      {livingMode === 'movie' && <span className="w-2 h-2 rounded-full bg-indigo-400"></span>}
-                    </button>
+                    </div>
+
+                    {/* Curtain Slider Indicator in App */}
+                    <div className="mt-3 pt-2 border-t border-slate-800/80 text-[10px] text-slate-400">
+                      <div className="flex justify-between font-mono mb-1">
+                        <span>Drape Position</span>
+                        <span className="text-white font-bold">
+                          {livingMode === 'movie' ? '100% Closed' : livingMode === 'discussion' ? '50%' : livingMode === 'guest' ? '25%' : '0% (Open)'}
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className="bg-sky-400 h-full transition-all duration-700"
+                          style={{
+                            width:
+                              livingMode === 'movie' ? '100%' : livingMode === 'discussion' ? '50%' : livingMode === 'guest' ? '25%' : '5%'
+                          }}
+                        ></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Bottom Feature Notes */}
+              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                <span>Tunable White CCT &bull; 0.1% Dimming Curve</span>
+                <span className="text-sky-400 font-mono font-bold">DALI-2 / KNX</span>
               </div>
             </div>
           </>
         )}
 
-        {/* =========================================
-            ROOM 2: MASTER BEDROOM (DIFFERENT PERSPECTIVE)
-           ========================================= */}
+        {/* ====================================================
+            SCENE 2: MASTER BEDROOM SUITE INTERIOR
+           ==================================================== */}
         {activeArea === 'bedroom' && (
           <>
-            <div className="relative flex-1 min-h-[320px] lg:min-h-full overflow-hidden">
+            <div className="relative flex-1 min-h-[360px] lg:min-h-[480px] overflow-hidden select-none">
+              {/* Authentic High-End Master Bedroom Interior Photo */}
               <img
-                src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1600&q=85"
-                alt="Modern Smart Bedroom Architecture"
+                src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1600&q=80"
+                alt="Luxury Master Bedroom Suite"
                 className={`w-full h-full object-cover transition-all duration-1000 ${
                   bedroomMode === 'morning'
-                    ? 'brightness-[1.0] contrast-[1.1]'
+                    ? 'brightness-[1.05] contrast-[1.1] saturate-[1.1]'
                     : bedroomMode === 'reading'
-                    ? 'brightness-[0.70] contrast-[1.2]'
-                    : 'brightness-[0.25] contrast-[1.3]' // Good night mode
+                    ? 'brightness-[0.78] contrast-[1.15] saturate-[1.1]'
+                    : 'brightness-[0.32] contrast-[1.3] saturate-[0.85]' // Good night mode
                 }`}
               />
 
@@ -310,160 +504,207 @@ export const AmbientLivingJourney: React.FC = () => {
                 style={{
                   backgroundColor:
                     bedroomMode === 'morning'
-                      ? 'rgba(251, 191, 36, 0.12)' // Morning sun warmth
+                      ? 'rgba(251, 191, 36, 0.14)' // Golden sunrise daylight
                       : bedroomMode === 'reading'
-                      ? 'rgba(245, 158, 11, 0.20)'
-                      : 'rgba(15, 23, 42, 0.75)' // Night darkness
+                      ? 'rgba(245, 158, 11, 0.22)' // Warm cozy reading spot
+                      : 'rgba(15, 23, 42, 0.65)', // Deep calm midnight
+                  mixBlendMode: 'screen'
                 }}
               ></div>
 
-              {/* Motorized Bedroom Drapes */}
-              <div
-                className="absolute top-0 bottom-0 left-0 bg-slate-950/90 transition-all duration-1000 ease-in-out border-r border-slate-700/50 shadow-2xl flex items-center justify-center pointer-events-none"
-                style={{
-                  width:
-                    bedroomMode === 'night'
-                      ? '50%'
-                      : bedroomMode === 'reading'
-                      ? '25%'
-                      : '6%' // Morning wakeup curtains open
-                }}
-              ></div>
+              {/* Bedroom Panoramic Terrace Window with Motorized Curtains */}
+              <div className="absolute top-4 bottom-12 right-4 w-64 sm:w-80 rounded-2xl overflow-hidden border-2 border-slate-700/60 shadow-2xl pointer-events-none z-10 flex">
+                <div className="absolute inset-0 z-0">
+                  <img
+                    src={
+                      bedroomMode === 'night'
+                        ? 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=800&q=80'
+                        : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80'
+                    }
+                    alt="Terrace Garden Horizon"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
-              <div
-                className="absolute top-0 bottom-0 right-0 bg-slate-950/90 transition-all duration-1000 ease-in-out border-l border-slate-700/50 shadow-2xl flex items-center justify-center pointer-events-none"
-                style={{
-                  width:
-                    bedroomMode === 'night'
-                      ? '50%'
-                      : bedroomMode === 'reading'
-                      ? '25%'
-                      : '6%'
-                }}
-              ></div>
+                {/* Left Drape */}
+                <div
+                  className="h-full bg-gradient-to-r from-slate-900 to-slate-800 border-r border-slate-700 shadow-xl transition-all duration-1000 ease-in-out relative z-20"
+                  style={{
+                    width: bedroomMode === 'night' ? '50%' : bedroomMode === 'reading' ? '25%' : '6%'
+                  }}
+                ></div>
 
-              {/* Live Room Status Badge */}
-              <div className="absolute bottom-5 left-5 bg-slate-950/85 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-2xl shadow-xl flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
-                <div>
-                  <div className="text-[10px] font-mono font-bold text-sky-400 uppercase">
-                    BEDROOM PERSPECTIVE
+                {/* Right Drape */}
+                <div
+                  className="h-full ml-auto bg-gradient-to-l from-slate-900 to-slate-800 border-l border-slate-700 shadow-xl transition-all duration-1000 ease-in-out relative z-20"
+                  style={{
+                    width: bedroomMode === 'night' ? '50%' : bedroomMode === 'reading' ? '25%' : '6%'
+                  }}
+                ></div>
+
+                {bedroomMode === 'night' && (
+                  <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none animate-in fade-in">
+                    <span className="text-[10px] font-mono font-bold text-indigo-300 bg-slate-950/80 px-2.5 py-1 rounded border border-slate-700">
+                      Sleep Blackouts Active
+                    </span>
                   </div>
-                  <div className="text-xs font-bold text-white">
-                    {bedroomMode === 'morning' && 'Morning Wakeup &bull; Curtains Glide Open & Sunlight Streams In'}
-                    {bedroomMode === 'reading' && 'Reading Mode &bull; Cozy Focused Warm Beam'}
-                    {bedroomMode === 'night' && 'Good Night &bull; Absolute Blackout & Gentle Night Glow'}
-                  </div>
+                )}
+              </div>
+
+              {/* Active Room Atmosphere Overlay Badge */}
+              <div className="absolute bottom-4 left-4 z-20 bg-slate-950/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-2xl">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
+                  <span className="text-[10px] font-mono font-bold text-sky-400 uppercase">
+                    MASTER SUITE &bull; PERSPECTIVE
+                  </span>
+                </div>
+                <div className="text-xs sm:text-sm font-bold text-white">
+                  {bedroomMode === 'morning' && 'Morning Wakeup &bull; Curtains Glide Open with Sunrise Ambient Glow'}
+                  {bedroomMode === 'reading' && 'Reading Mode &bull; Focused 2700K Headboard Light & Relaxed Drapes'}
+                  {bedroomMode === 'night' && 'Good Night &bull; Dual Blackouts 100% Shut & Path Nightglow (5%)'}
                 </div>
               </div>
             </div>
 
-            {/* Mobile Phone Mockup Controller for Bedroom */}
-            <div className="w-full lg:w-96 bg-brand-surface border-t lg:border-t-0 lg:border-l border-slate-800 p-6 flex flex-col justify-center">
-              <div className="max-w-xs mx-auto w-full">
-                <div className="bg-slate-950 border-4 border-slate-800 rounded-[36px] p-5 shadow-2xl relative">
-                  <div className="w-16 h-3 bg-slate-800 rounded-full mx-auto mb-4"></div>
+            {/* Bedroom Controls */}
+            <div className="w-full xl:w-[480px] bg-brand-surface border-t xl:border-t-0 xl:border-l border-slate-800 p-5 sm:p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                  <div>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider block">
+                      Bedside Keypad & Mobile Sync
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      Select a morning, reading, or sleep scene:
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">
+                    BEDSIDE MASTER
+                  </span>
+                </div>
 
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800/80">
-                    <div className="flex items-center gap-1.5">
-                      <Smartphone className="w-4 h-4 text-sky-400" />
-                      <span className="text-xs font-bold text-white font-mono">Master Bedroom</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Bedside Glass Keypad */}
+                  <div className="bg-slate-950 border-2 border-slate-700/80 rounded-2xl p-3.5 shadow-xl">
+                    <span className="text-[10px] font-mono font-bold text-slate-300 uppercase block mb-3">
+                      Bedside Touch Keypad
+                    </span>
+                    <div className="space-y-2">
+                      <button
+                        type="button"
+                        onClick={() => triggerBedroomScene('morning', 'wall')}
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
+                          bedroomMode === 'morning'
+                            ? 'bg-amber-950 border-amber-400 text-amber-200 ring-1 ring-amber-400 font-bold'
+                            : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Sun className="w-4 h-4 text-amber-400" />
+                          <span className="text-xs">Wake Up</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">07:00 AM</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => triggerBedroomScene('reading', 'wall')}
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
+                          bedroomMode === 'reading'
+                            ? 'bg-sky-950 border-sky-400 text-sky-200 ring-1 ring-sky-400 font-bold'
+                            : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Coffee className="w-4 h-4 text-sky-400" />
+                          <span className="text-xs">Reading</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Spotlight</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => triggerBedroomScene('night', 'wall')}
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
+                          bedroomMode === 'night'
+                            ? 'bg-indigo-950 border-indigo-400 text-indigo-200 ring-1 ring-indigo-400 font-bold'
+                            : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Moon className="w-4 h-4 text-indigo-400" />
+                          <span className="text-xs">Good Night</span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Blackout</span>
+                      </button>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400">ONLINE</span>
                   </div>
 
-                  <p className="text-[11px] text-slate-400 mb-3">
-                    Select a bedroom scene preset:
-                  </p>
+                  {/* Mobile App */}
+                  <div className="bg-slate-950 border-2 border-slate-700/80 rounded-2xl p-3.5 shadow-xl flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] font-mono font-bold text-slate-300 uppercase block mb-3">
+                        Curtain & HVAC Status
+                      </span>
 
-                  <div className="space-y-2.5">
-                    <button
-                      type="button"
-                      onClick={() => setBedroomMode('morning')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        bedroomMode === 'morning'
-                          ? 'bg-amber-950/80 border-amber-400 text-amber-200 shadow-lg ring-1 ring-amber-400/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Sun className={`w-4 h-4 ${bedroomMode === 'morning' ? 'text-amber-400' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Morning Wakeup</div>
-                          <div className="text-[10px] text-slate-400">Curtains Open &bull; Sunlight In</div>
+                      <div className="bg-slate-900/80 rounded-xl p-2.5 border border-slate-800 mb-2">
+                        <div className="text-[10px] text-slate-400 uppercase font-mono">Motorized Sheers</div>
+                        <div className="text-xs font-bold text-white mt-0.5">
+                          {bedroomMode === 'night' ? '100% Closed' : bedroomMode === 'reading' ? '50% Relaxed' : 'Fully Open'}
                         </div>
                       </div>
-                      {bedroomMode === 'morning' && <span className="w-2 h-2 rounded-full bg-amber-400"></span>}
-                    </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setBedroomMode('reading')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        bedroomMode === 'reading'
-                          ? 'bg-sky-950/80 border-sky-400 text-sky-200 shadow-lg ring-1 ring-sky-400/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Coffee className={`w-4 h-4 ${bedroomMode === 'reading' ? 'text-sky-400' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Reading Mode</div>
-                          <div className="text-[10px] text-slate-400">Restful Headboard Spot</div>
+                      <div className="bg-slate-900/80 rounded-xl p-2.5 border border-slate-800">
+                        <div className="text-[10px] text-slate-400 uppercase font-mono">Climate Temperature</div>
+                        <div className="text-xs font-bold text-emerald-400 mt-0.5">
+                          {bedroomMode === 'night' ? '23°C &bull; Night Breeze' : '24°C &bull; Auto Fan'}
                         </div>
                       </div>
-                      {bedroomMode === 'reading' && <span className="w-2 h-2 rounded-full bg-sky-400"></span>}
-                    </button>
+                    </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setBedroomMode('night')}
-                      className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
-                        bedroomMode === 'night'
-                          ? 'bg-indigo-950/80 border-indigo-500 text-indigo-200 shadow-lg ring-1 ring-indigo-400/50'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Moon className={`w-4 h-4 ${bedroomMode === 'night' ? 'text-indigo-400' : 'text-slate-400'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white">Good Night</div>
-                          <div className="text-[10px] text-slate-400">Drapes Closed &bull; Nightglow</div>
-                        </div>
-                      </div>
-                      {bedroomMode === 'night' && <span className="w-2 h-2 rounded-full bg-indigo-400"></span>}
-                    </button>
+                    <div className="text-[9px] font-mono text-slate-500 mt-3 text-center">
+                      Automated Circadian Rhythm
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex justify-between">
+                <span>Whisper-Quiet Somfy Glydea Motors (&lt;38 dB)</span>
+                <span className="text-sky-400 font-mono">ZIGBEE 3.0</span>
               </div>
             </div>
           </>
         )}
 
-        {/* =========================================
-            SCENE 3: EXTERIOR VILLA GATE & MOVING CAR CLIMAX
-           ========================================= */}
+        {/* ====================================================
+            SCENE 3: EXTERIOR VILLA GATE & VEHICLE ARRIVAL CLIMAX
+           ==================================================== */}
         {activeArea === 'exterior' && (
           <>
-            <div className="relative flex-1 min-h-[340px] lg:min-h-full overflow-hidden bg-gradient-to-b from-slate-950 via-[#0B1528] to-slate-950 flex flex-col justify-end p-6">
-              {/* Architectural Villa Exterior Driveway Backdrop */}
+            <div className="relative flex-1 min-h-[360px] lg:min-h-[480px] overflow-hidden bg-slate-950 flex flex-col justify-end p-6 select-none">
+              {/* Verified High-Resolution Villa Driveway Backdrop */}
               <img
-                src="https://images.unsplash.com/photo-1613082390827-02e867518456?auto=format&fit=crop&w=1600&q=85"
-                alt="Villa Driveway & Gate"
-                className="absolute inset-0 w-full h-full object-cover brightness-[0.6] contrast-[1.1]"
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+                alt="Contemporary Villa Driveway"
+                className="absolute inset-0 w-full h-full object-cover brightness-[0.65] contrast-[1.1]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
 
               {/* Physical Gate Structure Layer */}
-              <div className="relative w-full max-w-xl mx-auto h-44 flex items-end justify-between z-20">
+              <div className="relative w-full max-w-xl mx-auto h-48 flex items-end justify-between z-20">
                 {/* Left Pillar */}
-                <div className="w-10 sm:w-12 h-40 bg-gradient-to-r from-slate-800 to-slate-700 rounded-t border-t border-x border-slate-600 shadow-xl relative">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-3 bg-amber-500/80 rounded-full blur-[2px]"></div>
+                <div className="w-12 h-44 bg-gradient-to-r from-slate-800 to-slate-700 rounded-t border-t border-x border-slate-600 shadow-2xl relative">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-3.5 bg-amber-500/80 rounded-full blur-[2px]"></div>
+                  <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-400 tracking-wider rotate-90">
+                    PILLAR A
+                  </div>
                 </div>
 
-                {/* Motorized Sliding Gate Leaf that moves smoothly */}
+                {/* Motorized Sliding Gate Leaf that slides smoothly */}
                 <div
-                  className="absolute bottom-1 left-12 right-12 h-36 border-2 border-slate-500 rounded-t-sm shadow-2xl transition-all duration-1000 ease-in-out flex items-center justify-evenly bg-slate-900/95 backdrop-blur-sm"
+                  className="absolute bottom-1 left-12 right-12 h-40 border-2 border-slate-400 rounded-t shadow-2xl transition-all duration-1000 ease-in-out flex items-center justify-evenly bg-slate-900/95 backdrop-blur-sm"
                   style={{
                     transform:
                       gateAnimState === 'open' || gateAnimState === 'transiting'
@@ -476,28 +717,31 @@ export const AmbientLivingJourney: React.FC = () => {
                     opacity: gateAnimState === 'open' || gateAnimState === 'transiting' ? 0.35 : 1
                   }}
                 >
-                  {[...Array(12)].map((_, i) => (
-                    <div key={i} className="w-1.5 h-full bg-gradient-to-b from-slate-400 via-slate-600 to-slate-800 rounded-full opacity-80"></div>
+                  {[...Array(14)].map((_, i) => (
+                    <div key={i} className="w-1.5 h-full bg-gradient-to-b from-slate-300 via-slate-500 to-slate-800 rounded-full opacity-80"></div>
                   ))}
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-slate-950 border border-slate-700 rounded text-[9px] font-bold text-sky-400 font-mono">
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-slate-950 border border-slate-700 rounded text-[9px] font-bold text-sky-400 font-mono">
                     MAXDAX AUTOMATION
                   </div>
                 </div>
 
-                {/* Right Pillar with Motor Housing */}
-                <div className="w-10 sm:w-12 h-40 bg-gradient-to-l from-slate-800 to-slate-700 rounded-t border-t border-x border-slate-600 shadow-xl relative">
-                  <div className={`absolute -top-4 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full transition-all duration-300 ${
+                {/* Right Pillar with Motor Housing & Warning Beacon */}
+                <div className="w-12 h-44 bg-gradient-to-l from-slate-800 to-slate-700 rounded-t border-t border-x border-slate-600 shadow-2xl relative">
+                  <div className={`absolute -top-5 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full transition-all duration-300 ${
                     gateAnimState === 'opening' || gateAnimState === 'closing'
-                      ? 'bg-amber-400 shadow-[0_0_15px_#f59e0b] animate-ping-slow'
+                      ? 'bg-amber-400 shadow-[0_0_20px_#f59e0b] animate-ping'
                       : 'bg-slate-700'
                   }`}></div>
+                  <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-400 tracking-wider -rotate-90">
+                    PILLAR B
+                  </div>
                 </div>
               </div>
 
               {/* Animated Vehicle Transiting Simulation */}
               {gateAnimState === 'transiting' && (
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 animate-in fade-in zoom-in duration-700">
-                  <div className="flex items-center gap-3 bg-slate-950/95 border-2 border-sky-400 text-sky-300 px-6 py-2.5 rounded-full shadow-2xl animate-bounce">
+                <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 animate-in fade-in zoom-in duration-700">
+                  <div className="flex items-center gap-3 bg-slate-950/95 border-2 border-sky-400 text-sky-300 px-6 py-3 rounded-full shadow-2xl animate-bounce">
                     <Car className="w-5 h-5 text-sky-400" />
                     <span className="text-xs font-bold tracking-wider uppercase font-mono">
                       Vehicle Entering Villa Driveway...
@@ -507,15 +751,15 @@ export const AmbientLivingJourney: React.FC = () => {
               )}
 
               {/* Status Badge */}
-              <div className="relative z-20 mt-4 max-w-xl mx-auto w-full bg-slate-950/85 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-2xl shadow-xl flex items-center justify-between">
+              <div className="relative z-20 mt-4 max-w-xl mx-auto w-full bg-slate-950/90 backdrop-blur-md border border-slate-700 px-4 py-2.5 rounded-2xl shadow-xl flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   <span className="text-xs font-bold text-white font-mono">
-                    {gateAnimState === 'closed' && 'Gate Closed & Perimeter Secure'}
-                    {gateAnimState === 'opening' && 'Command Received &bull; Gate Opening...'}
+                    {gateAnimState === 'closed' && 'Gate Closed & Perimeter Armed'}
+                    {gateAnimState === 'opening' && 'Opening Command &bull; Beacon Active...'}
                     {gateAnimState === 'open' && 'Gate Fully Open &bull; Driveway Clear'}
-                    {gateAnimState === 'transiting' && 'Authorized Vehicle Passing Through Photocells'}
-                    {gateAnimState === 'closing' && 'Vehicle Clear &bull; Auto-Closing Gate...'}
+                    {gateAnimState === 'transiting' && 'Authorized Vehicle Passing Safety Photocell'}
+                    {gateAnimState === 'closing' && 'Vehicle Clear &bull; Gate Auto-Closing...'}
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-sky-400 font-bold uppercase">
@@ -524,22 +768,34 @@ export const AmbientLivingJourney: React.FC = () => {
               </div>
             </div>
 
-            {/* Mobile Phone Mockup Controller for Exterior Gate */}
-            <div className="w-full lg:w-96 bg-brand-surface border-t lg:border-t-0 lg:border-l border-slate-800 p-6 flex flex-col justify-center">
-              <div className="max-w-xs mx-auto w-full">
-                <div className="bg-slate-950 border-4 border-slate-800 rounded-[36px] p-5 shadow-2xl relative">
-                  <div className="w-16 h-3 bg-slate-800 rounded-full mx-auto mb-4"></div>
+            {/* Gate Remote & Phone App Control Console */}
+            <div className="w-full xl:w-[480px] bg-brand-surface border-t xl:border-t-0 xl:border-l border-slate-800 p-5 sm:p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                  <div>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider block">
+                      Perimeter Gate Automation
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      Geofence auto-entry or smartphone remote:
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800">
+                    BFT / DEA 24V
+                  </span>
+                </div>
 
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800/80">
+                <div className="bg-slate-950 border-2 border-slate-700/80 rounded-2xl p-4 shadow-xl">
+                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                     <div className="flex items-center gap-1.5">
                       <Smartphone className="w-4 h-4 text-amber-400" />
-                      <span className="text-xs font-bold text-white font-mono">Gate Access</span>
+                      <span className="text-xs font-bold text-white font-mono">Gate Access Remote</span>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400">READY</span>
+                    <span className="text-[10px] font-mono text-emerald-400">ONLINE</span>
                   </div>
 
-                  <p className="text-[11px] text-slate-400 mb-4">
-                    Tap to trigger the full automated gate sequence:
+                  <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                    Tap to trigger the full automated gate sequence (flasher beacon lights up, motor slides the gate open, car drives through, safety photocells verify clearance, gate auto-closes):
                   </p>
 
                   <button
@@ -549,7 +805,7 @@ export const AmbientLivingJourney: React.FC = () => {
                     className={`w-full py-4 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl transition-all ${
                       gateAnimState !== 'closed'
                         ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                        : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20 active:scale-95 animate-pulse'
+                        : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20 active:scale-95'
                     }`}
                   >
                     <Car className="w-5 h-5" />
@@ -558,10 +814,22 @@ export const AmbientLivingJourney: React.FC = () => {
                     </span>
                   </button>
 
-                  <p className="text-[10px] text-slate-500 mt-4 leading-relaxed text-center">
-                    Simulates smartphone geofencing or RFID long-range transponder opening the motorized gate, vehicle entry, and auto-close.
-                  </p>
+                  <div className="grid grid-cols-2 gap-2 mt-4 text-[10px] font-mono text-slate-400">
+                    <div className="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                      <span className="text-slate-500 block">Photocell Beam:</span>
+                      <span className="text-emerald-400 font-bold">ALIGNED & SECURE</span>
+                    </div>
+                    <div className="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                      <span className="text-slate-500 block">Backup Battery:</span>
+                      <span className="text-emerald-400 font-bold">100% CHARGED</span>
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex justify-between">
+                <span>Heavy-Duty Italian Sliding Motor (Up to 1200kg)</span>
+                <span className="text-amber-400 font-mono">IP67 WEATHERPROOF</span>
               </div>
             </div>
           </>

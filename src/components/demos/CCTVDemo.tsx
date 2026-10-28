@@ -27,7 +27,7 @@ const cameraFeeds: CameraFeed[] = [
     id: 1,
     name: 'CAM 01 — MAIN GATE & DRIVEWAY',
     location: 'North Entrance Pillar',
-    dayImage: 'https://images.unsplash.com/photo-1613082390827-02e867518456?auto=format&fit=crop&w=1000&q=80',
+    dayImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
     nightImage: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=1000&q=80',
     resolution: '4K ColorVu'
   },
@@ -51,7 +51,7 @@ const cameraFeeds: CameraFeed[] = [
     id: 4,
     name: 'CAM 04 — REAR GARDEN & POOLSIDE',
     location: 'South Lawn Terrace',
-    dayImage: 'https://images.unsplash.com/photo-1558435186-d31d1430097a?auto=format&fit=crop&w=1000&q=80',
+    dayImage: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?auto=format&fit=crop&w=1000&q=80',
     nightImage: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80',
     resolution: '4K Ultra HD'
   }

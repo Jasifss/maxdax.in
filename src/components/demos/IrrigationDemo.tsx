@@ -61,7 +61,7 @@ export const IrrigationDemo: React.FC = () => {
       <div className="relative h-80 sm:h-96 overflow-hidden select-none border-b border-slate-800">
         {/* Real Landscape Lawn Photo Backdrop */}
         <img
-          src="https://images.unsplash.com/photo-1558435186-d31d1430097a?auto=format&fit=crop&w=1600&q=85"
+          src="https://images.unsplash.com/photo-1592150621744-aca64f48394a?auto=format&fit=crop&w=1600&q=85"
           alt="Lush Villa Garden"
           className="w-full h-full object-cover brightness-[0.75] contrast-[1.05]"
         />
