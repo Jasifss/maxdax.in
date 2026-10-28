@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Smartphone,
   Tv,
@@ -13,44 +13,61 @@ import {
   Moon,
   Play,
   RotateCcw,
-  CheckCircle2,
   Sliders,
   ShieldCheck,
   ChevronRight,
   Volume2,
   Eye,
   Check,
-  Power
+  Power,
+  Layers,
+  Compass,
+  Activity,
+  Zap,
+  Radio
 } from 'lucide-react';
 
 export const AmbientLivingJourney: React.FC = () => {
-  // Active Space: 1 = Living Room, 2 = Master Bedroom, 3 = Villa Exterior & Gate
+  // Navigation: 3 Distinct Architectural Spaces
   const [activeTab, setActiveTab] = useState<'living' | 'bedroom' | 'exterior'>('living');
 
   // =========================================================================
-  // SCENE 1: LIVING ROOM STATES
+  // SCENE 1: LUXURY LIVING ROOM & HOME CINEMA
   // =========================================================================
-  // Modes: 'guest' (warm 2700K), 'task' (crisp white 4500K), 'reading' (reading lamp), 'movie' (curtains close + TV on + cyan/violet cove)
+  // Modes: 'guest' (warm amber 2700K), 'task' (crisp daylight 4500K), 'reading' (floor lamp cone), 'movie' (TV on + curtains close + indigo cove)
   const [livingMode, setLivingMode] = useState<'guest' | 'task' | 'reading' | 'movie'>('guest');
   const [curtainsClosedLiving, setCurtainsClosedLiving] = useState<boolean>(false);
   const [handTapActive, setHandTapActive] = useState<string | null>(null);
+  const [isDemoPlayingLiving, setIsDemoPlayingLiving] = useState<boolean>(false);
 
-  // When switching to movie mode, automatically close curtains
   const triggerLivingMode = (mode: 'guest' | 'task' | 'reading' | 'movie') => {
     setHandTapActive(mode);
-    setTimeout(() => setHandTapActive(null), 700);
+    setTimeout(() => setHandTapActive(null), 800);
 
     setLivingMode(mode);
     if (mode === 'movie') {
       setCurtainsClosedLiving(true);
     } else if (mode === 'task') {
-      // Open curtains for natural daylight if in task mode
       setCurtainsClosedLiving(false);
     }
   };
 
+  // Automated Showcase Tour for Living Room
+  useEffect(() => {
+    if (!isDemoPlayingLiving) return;
+    const modes: ('guest' | 'task' | 'reading' | 'movie')[] = ['guest', 'task', 'reading', 'movie'];
+    let idx = modes.indexOf(livingMode);
+
+    const timer = setInterval(() => {
+      idx = (idx + 1) % modes.length;
+      triggerLivingMode(modes[idx]);
+    }, 3200);
+
+    return () => clearInterval(timer);
+  }, [isDemoPlayingLiving, livingMode]);
+
   // =========================================================================
-  // SCENE 2: BEDROOM STATES (Alexa Sleeping Mode)
+  // SCENE 2: MASTER SUITE & ALEXA SLEEPING ECOSYSTEM
   // =========================================================================
   const [bedroomSleepingMode, setBedroomSleepingMode] = useState<boolean>(false);
   const [curtainsClosedBedroom, setCurtainsClosedBedroom] = useState<boolean>(false);
@@ -65,8 +82,8 @@ export const AmbientLivingJourney: React.FC = () => {
       setCurtainsClosedBedroom(true);
       setAcRunning(true);
       setReadingPendantOn(false);
-      setTimeout(() => setAlexaTriggered(false), 2500);
-    }, 600);
+      setTimeout(() => setAlexaTriggered(false), 2800);
+    }, 700);
   };
 
   const resetBedroom = () => {
@@ -78,7 +95,7 @@ export const AmbientLivingJourney: React.FC = () => {
   };
 
   // =========================================================================
-  // SCENE 3: EXTERIOR VILLA, GARAGE, SPRINKLERS & GATE
+  // SCENE 3: VILLA EXTERIOR, GARAGE, SPRINKLERS & GATE
   // =========================================================================
   const [garageOpen, setGarageOpen] = useState<boolean>(false);
   const [exteriorLights, setExteriorLights] = useState<boolean>(true);
@@ -88,14 +105,14 @@ export const AmbientLivingJourney: React.FC = () => {
   const runCarDepartureSequence = () => {
     if (carDepartureState !== 'idle' && carDepartureState !== 'completed') return;
 
-    // Step 1: Flasher alerts & Gate starts opening
+    // Step 1: Flasher alerts & Gate glides open
     setCarDepartureState('opening_gate');
 
-    // Step 2: Gate is open -> Car starts driving out
+    // Step 2: Gate is open -> Car starts driving out across the driveway
     setTimeout(() => {
       setCarDepartureState('car_moving');
 
-      // Step 3: Car has passed -> Gate automatically starts closing
+      // Step 3: Car has exited -> Gate automatically starts auto-closing
       setTimeout(() => {
         setCarDepartureState('closing_gate');
 
@@ -103,8 +120,8 @@ export const AmbientLivingJourney: React.FC = () => {
         setTimeout(() => {
           setCarDepartureState('completed');
         }, 2600);
-      }, 3000);
-    }, 2000);
+      }, 3200);
+    }, 2200);
   };
 
   const resetExterior = () => {
@@ -124,10 +141,10 @@ export const AmbientLivingJourney: React.FC = () => {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">
-              Interactive Architectural Automation &bull; Live Simulation
+              Photorealistic Smart Living &bull; 60 FPS Architectural Orchestration
             </span>
           </div>
-          <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <h3 className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2">
             {activeTab === 'living' && '01. Grand Living Suite & Home Cinema'}
             {activeTab === 'bedroom' && '02. Master Suite & Alexa Sleep Ecosystem'}
             {activeTab === 'exterior' && '03. Villa Landscape, Garage & Automated Gate'}
@@ -139,39 +156,39 @@ export const AmbientLivingJourney: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('living')}
-            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
               activeTab === 'living'
-                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
-            <Tv className="w-3.5 h-3.5" />
+            <Tv className="w-4 h-4" />
             <span>Living & Cinema</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('bedroom')}
-            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
               activeTab === 'bedroom'
-                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
-            <Mic className="w-3.5 h-3.5" />
+            <Mic className="w-4 h-4" />
             <span>Bedroom & Alexa</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('exterior')}
-            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 sm:px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
               activeTab === 'exterior'
-                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
-            <Car className="w-3.5 h-3.5" />
+            <Car className="w-4 h-4" />
             <span>Landscape & Gate</span>
           </button>
         </div>
@@ -180,7 +197,7 @@ export const AmbientLivingJourney: React.FC = () => {
       {/* =====================================================================
           MAIN INTERACTIVE CONTAINER
           ===================================================================== */}
-      <div className="relative min-h-[560px] lg:min-h-[640px] bg-slate-950 flex flex-col xl:flex-row items-stretch overflow-hidden">
+      <div className="relative min-h-[580px] lg:min-h-[660px] bg-slate-950 flex flex-col xl:flex-row items-stretch overflow-hidden">
         
         {/* ===================================================================
             SPACE 1: GRAND LIVING ROOM & HOME CINEMA
@@ -188,19 +205,19 @@ export const AmbientLivingJourney: React.FC = () => {
         {activeTab === 'living' && (
           <>
             {/* Visual Living Room Canvas */}
-            <div className="relative flex-1 min-h-[440px] lg:min-h-[580px] bg-black overflow-hidden select-none">
+            <div className="relative flex-1 min-h-[460px] lg:min-h-[600px] bg-black overflow-hidden select-none">
               {/* Ultra-High-End Modern Living Room Background */}
               <img
-                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85"
+                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1920&q=85"
                 alt="Architectural Living Room"
                 className={`w-full h-full object-cover transition-all duration-1000 ${
                   livingMode === 'guest'
-                    ? 'brightness-[0.95] contrast-[1.08] saturate-[1.2]'
+                    ? 'brightness-[0.96] contrast-[1.1] saturate-[1.25]'
                     : livingMode === 'task'
-                    ? 'brightness-[1.18] contrast-[1.15] saturate-[0.98]'
+                    ? 'brightness-[1.2] contrast-[1.16] saturate-[1.0]'
                     : livingMode === 'reading'
-                    ? 'brightness-[0.72] contrast-[1.2] saturate-[1.1]'
-                    : 'brightness-[0.4] contrast-[1.3] saturate-[1.2]' // Movie Mode
+                    ? 'brightness-[0.7] contrast-[1.22] saturate-[1.1]'
+                    : 'brightness-[0.38] contrast-[1.35] saturate-[1.25]' // Movie Mode
                 }`}
               />
 
@@ -210,38 +227,38 @@ export const AmbientLivingJourney: React.FC = () => {
                 style={{
                   backgroundColor:
                     livingMode === 'guest'
-                      ? 'rgba(245, 158, 11, 0.22)' // 2700K Warm Golden Amber
+                      ? 'rgba(245, 158, 11, 0.24)' // 2700K Warm Golden Amber
                       : livingMode === 'task'
-                      ? 'rgba(240, 249, 255, 0.12)' // 4500K Pure Daylight White
+                      ? 'rgba(240, 249, 255, 0.14)' // 4500K Pure Daylight White
                       : livingMode === 'reading'
                       ? 'rgba(217, 119, 6, 0.18)' // Intimate focused warm tone
-                      : 'rgba(30, 27, 75, 0.55)', // Deep Cinema Indigo
+                      : 'rgba(30, 27, 75, 0.65)', // Deep Cinema Indigo
                   mixBlendMode: livingMode === 'movie' ? 'multiply' : 'screen'
                 }}
               ></div>
 
-              {/* Ceiling Cove Lighting Strip */}
+              {/* Ceiling Architectural Cove Lighting Strip */}
               <div
-                className="absolute top-0 inset-x-0 h-14 pointer-events-none blur-lg transition-all duration-1000"
+                className="absolute top-0 inset-x-0 h-16 pointer-events-none blur-xl transition-all duration-1000"
                 style={{
                   backgroundColor:
                     livingMode === 'guest'
-                      ? 'rgba(251, 191, 36, 0.55)'
+                      ? 'rgba(251, 191, 36, 0.6)'
                       : livingMode === 'task'
-                      ? 'rgba(255, 255, 255, 0.45)'
+                      ? 'rgba(255, 255, 255, 0.5)'
                       : livingMode === 'reading'
                       ? 'rgba(245, 158, 11, 0.25)'
-                      : 'rgba(129, 140, 248, 0.75)' // Glowing Cyan/Violet Cove in Movie Mode
+                      : 'rgba(129, 140, 248, 0.85)' // Glowing Cyan/Violet Cove in Movie Mode
                 }}
               ></div>
 
               {/* ---------------------------------------------------------------
-                  85" HOME CINEMA DISPLAY (POWERS ON IN MOVIE MODE)
+                  85" HOME CINEMA OLED DISPLAY (POWERS ON IN MOVIE MODE)
                   --------------------------------------------------------------- */}
               <div
-                className={`absolute top-[18%] left-[28%] w-[42%] aspect-[16/9] rounded-xl overflow-hidden border-4 transition-all duration-1000 z-10 shadow-2xl flex items-center justify-center ${
+                className={`absolute top-[18%] left-[27%] w-[44%] aspect-[16/9] rounded-xl overflow-hidden border-4 transition-all duration-1000 z-10 shadow-2xl flex items-center justify-center ${
                   livingMode === 'movie'
-                    ? 'border-indigo-400/90 shadow-[0_0_60px_rgba(99,102,241,0.6)] scale-100 opacity-100'
+                    ? 'border-indigo-400/90 shadow-[0_0_80px_rgba(99,102,241,0.7)] scale-100 opacity-100'
                     : 'border-slate-800 bg-black/95 scale-[0.98] opacity-80'
                 }`}
               >
@@ -254,44 +271,46 @@ export const AmbientLivingJourney: React.FC = () => {
                       className="w-full h-full object-cover animate-pulse duration-[3000ms]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-3">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
                         <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">
-                          4K DOLBY ATMOS &bull; CINEMA PLAYING
+                          4K DOLBY VISION &bull; CINEMA AUDIO ACTIVE
                         </span>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center p-2 text-slate-600 font-mono text-[10px]">
-                    <Tv className="w-6 h-6 mx-auto mb-1 opacity-40 text-slate-500" />
-                    <span>OLED DISPLAY &bull; STANDBY</span>
+                  <div className="text-center p-2 text-slate-500 font-mono text-[10px]">
+                    <Tv className="w-6 h-6 mx-auto mb-1 opacity-40 text-slate-400" />
+                    <span>85" OLED SCREEN &bull; STANDBY</span>
                   </div>
                 )}
               </div>
 
               {/* ---------------------------------------------------------------
-                  READING LAMP (TURNS ON SPECIFICALLY IN READING MODE)
+                  PHYSICAL FLOOR READING LAMP (LIGHTS ON IN READING MODE)
                   --------------------------------------------------------------- */}
               <div className="absolute top-[28%] right-[14%] z-10 flex flex-col items-center pointer-events-none">
-                {/* Floor Lamp Top Shade */}
+                {/* Lamp Dome Shade */}
                 <div
-                  className={`w-12 h-8 rounded-t-full border border-amber-300/40 transition-all duration-700 ${
+                  className={`w-14 h-9 rounded-t-full border border-amber-300/40 transition-all duration-700 ${
                     livingMode === 'reading'
-                      ? 'bg-amber-300 shadow-[0_0_40px_rgba(251,191,36,0.9)]'
+                      ? 'bg-amber-300 shadow-[0_0_50px_rgba(251,191,36,0.95)]'
                       : 'bg-stone-800'
                   }`}
                 ></div>
-                {/* Lamp Pole */}
-                <div className="w-1 h-36 bg-stone-700"></div>
+                {/* Slender Lamp Pole */}
+                <div className="w-1.5 h-40 bg-stone-700 shadow-md"></div>
+                {/* Heavy Base Plate */}
+                <div className="w-12 h-2 bg-stone-800 rounded-full"></div>
 
-                {/* Downward Focused Spotlight Beam Cone */}
+                {/* Downward Focused Spotlight Beam Cone onto Reading Area */}
                 {livingMode === 'reading' && (
                   <div
-                    className="absolute top-6 w-44 h-56 pointer-events-none animate-in fade-in duration-700"
+                    className="absolute top-8 w-48 h-64 pointer-events-none animate-in fade-in duration-700"
                     style={{
-                      background: 'radial-gradient(ellipse at top, rgba(251, 191, 36, 0.65) 0%, rgba(245, 158, 11, 0.15) 60%, transparent 100%)',
-                      clipPath: 'polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%)'
+                      background: 'radial-gradient(ellipse at top, rgba(251, 191, 36, 0.7) 0%, rgba(245, 158, 11, 0.2) 65%, transparent 100%)',
+                      clipPath: 'polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)'
                     }}
                   ></div>
                 )}
@@ -301,7 +320,7 @@ export const AmbientLivingJourney: React.FC = () => {
                   REALISTIC MOTORIZED BLACKOUT CURTAINS
                   (Glides smoothly closed in Movie Mode or via toggle)
                   --------------------------------------------------------------- */}
-              <div className="absolute top-4 bottom-14 right-2 w-56 sm:w-72 rounded-2xl overflow-hidden border-2 border-slate-800 shadow-2xl pointer-events-none z-20 flex">
+              <div className="absolute top-4 bottom-14 right-2 w-56 sm:w-76 rounded-2xl overflow-hidden border-2 border-slate-800 shadow-2xl pointer-events-none z-20 flex">
                 {/* Window Exterior Landscape Glass */}
                 <div className="absolute inset-0 z-0">
                   <img
@@ -346,18 +365,18 @@ export const AmbientLivingJourney: React.FC = () => {
               </div>
 
               {/* Status Pill Badge */}
-              <div className="absolute bottom-4 left-4 z-20 bg-slate-950/90 backdrop-blur-md border border-slate-700/80 px-4 py-2 rounded-2xl shadow-2xl">
+              <div className="absolute bottom-4 left-4 z-20 bg-slate-950/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-2xl">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span className="text-xs font-bold text-white uppercase tracking-wider">
-                    {livingMode === 'guest' && 'Guest Mode &bull; Warm 2700K Amber Glow'}
+                    {livingMode === 'guest' && 'Guest Mode &bull; Warm 2700K Amber Ambient Glow'}
                     {livingMode === 'task' && 'Task Mode &bull; 4500K Focused White Daylight'}
-                    {livingMode === 'reading' && 'Reading Mode &bull; Side Armchair Spotlight'}
-                    {livingMode === 'movie' && 'Movie Mode &bull; TV Screen Active & Blackout Drapes Closed'}
+                    {livingMode === 'reading' && 'Reading Mode &bull; Armchair Reading Lamp Active'}
+                    {livingMode === 'movie' && 'Movie Mode &bull; TV Screen Active & Blackouts Closed'}
                   </span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-0.5 font-mono">
-                  Curtains: {curtainsClosedLiving ? '100% Closed' : 'Retracted Open'} &bull; Light Level: {livingMode === 'task' ? '650 Lux' : livingMode === 'guest' ? '280 Lux' : livingMode === 'reading' ? '180 Lux' : '35 Lux'}
+                <div className="text-[10px] text-slate-400 mt-1 font-mono">
+                  Curtains: {curtainsClosedLiving ? '100% Blackout Closed' : 'Open'} &bull; Light Level: {livingMode === 'task' ? '680 Lux' : livingMode === 'guest' ? '290 Lux' : livingMode === 'reading' ? '180 Lux' : '35 Lux'}
                 </div>
               </div>
             </div>
@@ -365,33 +384,47 @@ export const AmbientLivingJourney: React.FC = () => {
             {/* Right: Photorealistic Interactive Smartphone Controller */}
             <div className="w-full xl:w-[440px] bg-slate-900/95 border-t xl:border-t-0 xl:border-l border-slate-800 p-5 sm:p-6 flex flex-col justify-between items-center">
               <div className="w-full">
-                <div className="text-center mb-4">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 block mb-1">
-                    Virtual Smartphone Scene Controller
-                  </span>
-                  <p className="text-xs text-slate-300">
-                    Tap the modes on the phone screen to trigger real-time lighting, TV, and motorized drapery:
-                  </p>
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                  <div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 block mb-0.5">
+                      Virtual Smartphone Controller
+                    </span>
+                    <h4 className="text-sm font-bold text-white">Interactive Hand Controls</h4>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsDemoPlayingLiving(!isDemoPlayingLiving)}
+                    className={`px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all flex items-center gap-1.5 ${
+                      isDemoPlayingLiving
+                        ? 'bg-amber-500 text-slate-950 animate-pulse'
+                        : 'bg-slate-800 text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <Play className="w-3 h-3" />
+                    <span>{isDemoPlayingLiving ? 'Demo Playing' : 'Auto Tour'}</span>
+                  </button>
                 </div>
 
                 {/* -------------------------------------------------------------
                     IPHONE HARDWARE MOCKUP WITH ACTIVE TOUCH SCREEN
                     ------------------------------------------------------------- */}
-                <div className="w-72 sm:w-80 mx-auto bg-slate-950 rounded-[44px] p-3.5 border-4 border-slate-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative">
+                <div className="w-72 sm:w-80 mx-auto bg-slate-950 rounded-[44px] p-3.5 border-4 border-slate-700 shadow-[0_20px_50px_rgba(0,0,0,0.85)] relative">
                   {/* Dynamic Island Pill */}
-                  <div className="w-24 h-4 bg-black rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-slate-800 ml-auto mr-2"></div>
+                  <div className="w-24 h-4 bg-black rounded-full mx-auto mb-2 flex items-center justify-between px-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-800"></div>
+                    <div className="w-2 h-2 rounded-full bg-slate-900"></div>
                   </div>
 
                   {/* Phone Screen Glass UI */}
-                  <div className="bg-slate-900 rounded-[32px] p-4 border border-slate-800 shadow-inner space-y-3 relative overflow-hidden">
+                  <div className="bg-slate-900 rounded-[32px] p-4 border border-slate-800 shadow-inner space-y-2.5 relative overflow-hidden">
                     {/* Header */}
                     <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                       <div>
-                        <div className="text-[10px] font-bold text-sky-400 font-mono">MAXDAX SMART LIVING</div>
-                        <div className="text-xs font-bold text-white">Living Room Controller</div>
+                        <div className="text-[9px] font-bold text-sky-400 font-mono tracking-wider">MAXDAX SMART LIVING</div>
+                        <div className="text-xs font-bold text-white">Living Room Space</div>
                       </div>
-                      <span className="text-[9px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800">
+                      <span className="text-[8px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800">
                         ONLINE
                       </span>
                     </div>
@@ -402,7 +435,7 @@ export const AmbientLivingJourney: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => triggerLivingMode('guest')}
-                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative ${
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative group ${
                           livingMode === 'guest'
                             ? 'bg-amber-950/80 border-amber-400 text-amber-200 shadow-lg ring-1 ring-amber-400'
                             : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
@@ -411,7 +444,7 @@ export const AmbientLivingJourney: React.FC = () => {
                         <div className="flex items-center gap-2.5">
                           <Sun className="w-4 h-4 text-amber-400" />
                           <div>
-                            <div className="text-xs font-bold">Guest Mode</div>
+                            <div className="text-xs font-bold text-white">Guest Mode</div>
                             <div className="text-[9px] text-slate-400">Warm 2700K Ambient Glow</div>
                           </div>
                         </div>
@@ -423,11 +456,11 @@ export const AmbientLivingJourney: React.FC = () => {
                         )}
                       </button>
 
-                      {/* 2. TASK MODE (CRISP WHITE DAYLIGHT) */}
+                      {/* 2. TASK MODE (CRISP WHITE DAYLIGHT WITH HAND-CLICK ANIMATION) */}
                       <button
                         type="button"
                         onClick={() => triggerLivingMode('task')}
-                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative ${
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative group ${
                           livingMode === 'task'
                             ? 'bg-sky-950/80 border-sky-400 text-sky-200 shadow-lg ring-1 ring-sky-400'
                             : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
@@ -436,14 +469,22 @@ export const AmbientLivingJourney: React.FC = () => {
                         <div className="flex items-center gap-2.5">
                           <Sparkles className="w-4 h-4 text-sky-400" />
                           <div>
-                            <div className="text-xs font-bold">Task Mode</div>
+                            <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                              <span>Task Mode</span>
+                              <span className="text-[8px] font-mono text-sky-400 bg-sky-950/80 px-1.5 py-0.2 rounded border border-sky-800">
+                                TAP ME
+                              </span>
+                            </div>
                             <div className="text-[9px] text-slate-400">Crisp Daylight 4500K</div>
                           </div>
                         </div>
                         {livingMode === 'task' && <Check className="w-4 h-4 text-sky-400" />}
 
+                        {/* Interactive Finger Click Indicator */}
                         {handTapActive === 'task' && (
-                          <div className="absolute right-4 w-7 h-7 rounded-full bg-sky-400/50 animate-ping pointer-events-none"></div>
+                          <div className="absolute right-4 w-8 h-8 rounded-full bg-sky-400/50 animate-ping pointer-events-none flex items-center justify-center">
+                            <span className="text-sm">👆</span>
+                          </div>
                         )}
                       </button>
 
@@ -451,7 +492,7 @@ export const AmbientLivingJourney: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => triggerLivingMode('reading')}
-                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative ${
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative group ${
                           livingMode === 'reading'
                             ? 'bg-amber-950/80 border-amber-500 text-amber-200 shadow-lg ring-1 ring-amber-500'
                             : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
@@ -460,7 +501,7 @@ export const AmbientLivingJourney: React.FC = () => {
                         <div className="flex items-center gap-2.5">
                           <Lamp className="w-4 h-4 text-amber-500" />
                           <div>
-                            <div className="text-xs font-bold">Reading Mode</div>
+                            <div className="text-xs font-bold text-white">Reading Mode</div>
                             <div className="text-[9px] text-slate-400">Side Floor Lamp Cone Active</div>
                           </div>
                         </div>
@@ -475,7 +516,7 @@ export const AmbientLivingJourney: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => triggerLivingMode('movie')}
-                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative ${
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all relative group ${
                           livingMode === 'movie'
                             ? 'bg-indigo-950/90 border-indigo-400 text-indigo-200 shadow-lg ring-1 ring-indigo-400'
                             : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
@@ -484,7 +525,7 @@ export const AmbientLivingJourney: React.FC = () => {
                         <div className="flex items-center gap-2.5">
                           <Tv className="w-4 h-4 text-indigo-400" />
                           <div>
-                            <div className="text-xs font-bold">Movie / Game Mode</div>
+                            <div className="text-xs font-bold text-white">Movie / Game Mode</div>
                             <div className="text-[9px] text-slate-400">TV ON &bull; Blackout Curtains Close</div>
                           </div>
                         </div>
@@ -511,7 +552,7 @@ export const AmbientLivingJourney: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setCurtainsClosedLiving(false)}
-                          className={`py-1 rounded-lg text-[10px] font-bold border transition-all ${
+                          className={`py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
                             !curtainsClosedLiving
                               ? 'bg-sky-600 border-sky-400 text-white'
                               : 'bg-slate-950 border-slate-800 text-slate-400'
@@ -522,7 +563,7 @@ export const AmbientLivingJourney: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setCurtainsClosedLiving(true)}
-                          className={`py-1 rounded-lg text-[10px] font-bold border transition-all ${
+                          className={`py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
                             curtainsClosedLiving
                               ? 'bg-sky-600 border-sky-400 text-white'
                               : 'bg-slate-950 border-slate-800 text-slate-400'
@@ -537,7 +578,7 @@ export const AmbientLivingJourney: React.FC = () => {
               </div>
 
               <div className="mt-4 text-[10px] font-mono text-slate-500 text-center">
-                MAXDAX &bull; eGlu Touch Protocol &bull; RF Synchronized
+                MAXDAX &bull; Touch & Motorized Shading Protocol
               </div>
             </div>
           </>
@@ -549,15 +590,15 @@ export const AmbientLivingJourney: React.FC = () => {
         {activeTab === 'bedroom' && (
           <>
             {/* Visual Master Bedroom Canvas */}
-            <div className="relative flex-1 min-h-[440px] lg:min-h-[580px] bg-black overflow-hidden select-none">
+            <div className="relative flex-1 min-h-[460px] lg:min-h-[600px] bg-black overflow-hidden select-none">
               {/* Luxury Master Bedroom Background */}
               <img
-                src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1800&q=85"
+                src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1920&q=85"
                 alt="Luxury Master Bedroom"
                 className={`w-full h-full object-cover transition-all duration-1000 ${
                   bedroomSleepingMode
-                    ? 'brightness-[0.38] contrast-[1.25] saturate-[0.85]' // Deep dimmed night
-                    : 'brightness-[1.05] contrast-[1.08] saturate-[1.1]' // Bright day/evening
+                    ? 'brightness-[0.35] contrast-[1.3] saturate-[0.8]' // Deep dimmed night
+                    : 'brightness-[1.08] contrast-[1.1] saturate-[1.15]' // Bright day/evening
                 }`}
               />
 
@@ -566,7 +607,7 @@ export const AmbientLivingJourney: React.FC = () => {
                 className="absolute inset-0 pointer-events-none transition-all duration-1000"
                 style={{
                   backgroundColor: bedroomSleepingMode
-                    ? 'rgba(15, 23, 42, 0.65)' // Deep night dark
+                    ? 'rgba(15, 23, 42, 0.7)' // Deep night dark
                     : 'rgba(251, 191, 36, 0.12)', // Warm daytime comfort
                   mixBlendMode: bedroomSleepingMode ? 'multiply' : 'screen'
                 }}
@@ -575,28 +616,28 @@ export const AmbientLivingJourney: React.FC = () => {
               {/* ---------------------------------------------------------------
                   WALL-MOUNTED INVERTER AC UNIT WITH DISPLAY & AIRFLOW BREEZE
                   --------------------------------------------------------------- */}
-              <div className="absolute top-6 left-[32%] z-20 flex flex-col items-center">
+              <div className="absolute top-6 left-[30%] z-20 flex flex-col items-center">
                 {/* Modern AC Body */}
-                <div className="w-56 sm:w-64 h-14 bg-gradient-to-b from-stone-100 to-stone-300 rounded-lg shadow-2xl border border-stone-400/60 p-2 flex items-center justify-between">
+                <div className="w-56 sm:w-68 h-14 bg-gradient-to-b from-stone-100 to-stone-300 rounded-xl shadow-2xl border border-stone-400/60 p-2 flex items-center justify-between">
                   <div className="text-[8px] font-mono font-bold text-stone-600 pl-2">
                     DAIKIN VRV INVERTER
                   </div>
                   {/* Digital Temperature LED Display */}
-                  <div className="flex items-center gap-1 bg-black/80 px-2 py-0.5 rounded text-[10px] font-mono font-bold text-cyan-300 border border-cyan-800">
-                    <Wind className="w-3 h-3 text-cyan-400 animate-spin" />
+                  <div className="flex items-center gap-1 bg-black/85 px-2.5 py-1 rounded text-[10px] font-mono font-bold text-cyan-300 border border-cyan-800">
+                    <Wind className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
                     <span>{acRunning ? '22°C COOL' : 'OFF'}</span>
                   </div>
                 </div>
 
                 {/* Animated Cool Airflow Waves Streaming Down */}
                 {acRunning && (
-                  <div className="w-52 h-36 pointer-events-none flex justify-around overflow-hidden mt-1 opacity-70">
-                    {[...Array(5)].map((_, i) => (
+                  <div className="w-56 h-40 pointer-events-none flex justify-around overflow-hidden mt-1 opacity-75">
+                    {[...Array(6)].map((_, i) => (
                       <div
                         key={i}
                         className="w-1.5 h-full bg-gradient-to-b from-cyan-400 via-sky-300 to-transparent rounded-full animate-bounce"
                         style={{
-                          animationDelay: `${i * 180}ms`,
+                          animationDelay: `${i * 160}ms`,
                           animationDuration: '1.2s'
                         }}
                       ></div>
@@ -613,7 +654,7 @@ export const AmbientLivingJourney: React.FC = () => {
                 <div
                   className={`w-9 h-9 rounded-full border transition-all duration-700 ${
                     readingPendantOn
-                      ? 'bg-amber-300 border-amber-200 shadow-[0_0_50px_rgba(251,191,36,0.9)]'
+                      ? 'bg-amber-300 border-amber-200 shadow-[0_0_60px_rgba(251,191,36,0.95)]'
                       : 'bg-stone-800 border-stone-700'
                   }`}
                 ></div>
@@ -660,20 +701,20 @@ export const AmbientLivingJourney: React.FC = () => {
 
               {/* Pulsating Alexa Wave Toast */}
               {alexaTriggered && (
-                <div className="absolute top-6 inset-x-8 sm:inset-x-24 z-30 bg-slate-950/95 border-2 border-cyan-400 p-4 rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.6)] flex items-center justify-between animate-in fade-in zoom-in duration-300">
+                <div className="absolute top-6 inset-x-6 sm:inset-x-20 z-30 bg-slate-950/95 border-2 border-cyan-400 p-4 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.7)] flex items-center justify-between animate-in fade-in zoom-in duration-300">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center">
                       <Mic className="w-5 h-5 text-cyan-300 animate-pulse" />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-white">"Alexa, Sleeping Mode Activated"</div>
+                      <div className="text-xs sm:text-sm font-bold text-white">"Alexa, Sleeping Mode Activated"</div>
                       <div className="text-[10px] text-cyan-300">
-                        Closing Blackout Drapes &bull; Starting Inverter AC at 22°C &bull; Dimming Lights to 5%
+                        Closing Blackout Curtains &bull; Inverter AC 22°C Airflow Active &bull; Dimming Lights to 5%
                       </div>
                     </div>
                   </div>
                   <span className="text-[9px] font-mono text-cyan-400 border border-cyan-700 px-2 py-0.5 rounded-full">
-                    SMART HOME MESH
+                    SMART VOICE MESH
                   </span>
                 </div>
               )}
@@ -684,12 +725,12 @@ export const AmbientLivingJourney: React.FC = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span className="text-xs font-bold text-white uppercase tracking-wider">
                     {bedroomSleepingMode
-                      ? 'Sleep Sanctuary &bull; Blackout Curtains Closed & AC 22°C'
-                      : 'Daytime Bedroom &bull; Ambient Light & Daylight Vista'}
+                      ? 'Sleep Sanctuary &bull; Blackout Curtains Closed & AC 22°C Cool Active'
+                      : 'Daytime Bedroom &bull; Ambient Light & Daylight Panorama'}
                   </span>
                 </div>
                 <div className="text-[10px] text-slate-400 mt-1 font-mono">
-                  Curtains: {curtainsClosedBedroom ? '100% Blackout' : 'Open'} &bull; Climate: {acRunning ? '22°C Active (Whisper Fan)' : 'Standby'} &bull; Lights: {bedroomSleepingMode ? '5% Dimmed' : '100%'}
+                  Curtains: {curtainsClosedBedroom ? '100% Blackout Closed' : 'Open'} &bull; Climate: {acRunning ? '22°C Active (Whisper Fan 18dB)' : 'Standby'} &bull; Lights: {bedroomSleepingMode ? '5% Dimmed' : '100%'}
                 </div>
               </div>
             </div>
@@ -707,7 +748,7 @@ export const AmbientLivingJourney: React.FC = () => {
                     </span>
                   </div>
                   <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950 px-2.5 py-1 rounded-full border border-cyan-800">
-                    AMAZON ALEXA / SIRI
+                    AMAZON ALEXA
                   </span>
                 </div>
 
@@ -717,7 +758,7 @@ export const AmbientLivingJourney: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></div>
                       <span className="text-xs font-mono font-bold text-cyan-300 uppercase">
-                        Voice Assistant Trigger
+                        Voice Assistant Routine
                       </span>
                     </div>
                     <Volume2 className="w-4 h-4 text-cyan-400" />
@@ -734,7 +775,7 @@ export const AmbientLivingJourney: React.FC = () => {
                     <button
                       type="button"
                       onClick={activateAlexaSleepingMode}
-                      className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-400 hover:to-sky-500 text-slate-950 font-black text-xs transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2"
+                      className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-400 hover:to-sky-500 text-slate-950 font-black text-xs transition-all shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2"
                     >
                       <Mic className="w-4 h-4" />
                       <span>Trigger "Alexa Sleeping Mode"</span>
@@ -829,14 +870,14 @@ export const AmbientLivingJourney: React.FC = () => {
         {activeTab === 'exterior' && (
           <>
             {/* Visual Villa Exterior Canvas */}
-            <div className="relative flex-1 min-h-[460px] lg:min-h-[580px] bg-black overflow-hidden select-none">
+            <div className="relative flex-1 min-h-[480px] lg:min-h-[600px] bg-black overflow-hidden select-none">
               {/* Luxury Architectural Villa Exterior Background */}
               <img
-                src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1800&q=85"
+                src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1920&q=85"
                 alt="Luxury Modern Villa Facade"
                 className={`w-full h-full object-cover transition-all duration-1000 ${
                   exteriorLights
-                    ? 'brightness-[0.9] contrast-[1.15]'
+                    ? 'brightness-[0.92] contrast-[1.15]'
                     : 'brightness-[0.5] contrast-[1.2]'
                 }`}
               />
@@ -871,28 +912,28 @@ export const AmbientLivingJourney: React.FC = () => {
               </div>
 
               {/* ---------------------------------------------------------------
-                  LUSH LAWN WITH ANIMATED WATER SPRINKLERS
+                  LUSH LAWN WITH ANIMATED ROTARY WATER SPRINKLERS
                   --------------------------------------------------------------- */}
-              <div className="absolute bottom-2 left-[32%] w-64 sm:w-80 h-28 pointer-events-none z-10">
+              <div className="absolute bottom-2 left-[30%] w-64 sm:w-84 h-28 pointer-events-none z-10">
                 {sprinklersActive && (
                   <div className="relative w-full h-full">
                     {/* Sprinkler 1 */}
                     <div className="absolute bottom-2 left-6 flex flex-col items-center">
                       <div className="w-2.5 h-3 bg-stone-800 rounded-t border border-stone-600"></div>
                       {/* Water Arc Animation */}
-                      <div className="w-24 h-16 border-t-2 border-l-2 border-cyan-400/80 rounded-tl-full opacity-80 animate-ping"></div>
+                      <div className="w-24 h-16 border-t-2 border-l-2 border-cyan-400/85 rounded-tl-full opacity-80 animate-ping"></div>
                     </div>
 
                     {/* Sprinkler 2 */}
                     <div className="absolute bottom-4 left-32 flex flex-col items-center">
                       <div className="w-2.5 h-3 bg-stone-800 rounded-t border border-stone-600"></div>
-                      <div className="w-24 h-16 border-t-2 border-r-2 border-cyan-400/80 rounded-tr-full opacity-80 animate-ping" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-24 h-16 border-t-2 border-r-2 border-cyan-400/85 rounded-tr-full opacity-80 animate-ping" style={{ animationDelay: '300ms' }}></div>
                     </div>
 
                     {/* Sprinkler 3 */}
                     <div className="absolute bottom-2 right-8 flex flex-col items-center">
                       <div className="w-2.5 h-3 bg-stone-800 rounded-t border border-stone-600"></div>
-                      <div className="w-24 h-16 border-t-2 border-l-2 border-cyan-400/80 rounded-tl-full opacity-80 animate-ping" style={{ animationDelay: '600ms' }}></div>
+                      <div className="w-24 h-16 border-t-2 border-l-2 border-cyan-400/85 rounded-tl-full opacity-80 animate-ping" style={{ animationDelay: '600ms' }}></div>
                     </div>
                   </div>
                 )}
@@ -902,25 +943,25 @@ export const AmbientLivingJourney: React.FC = () => {
                   LUXURY CAR WITH SMOOTH DRIVE-OUT TRANSIT ANIMATION
                   --------------------------------------------------------------- */}
               <div
-                className={`absolute bottom-4 z-20 transition-all duration-[2800ms] ease-in-out flex items-center ${
+                className={`absolute bottom-4 z-20 transition-all duration-[3000ms] ease-in-out flex items-center ${
                   carDepartureState === 'idle' || carDepartureState === 'opening_gate'
                     ? 'left-[16%] opacity-100 scale-90'
                     : carDepartureState === 'car_moving'
                     ? 'left-[70%] opacity-100 scale-100'
-                    : 'left-[105%] opacity-0 scale-105' // Driven away
+                    : 'left-[110%] opacity-0 scale-105' // Driven away
                 }`}
               >
                 {/* Car Silhouette with Headlights */}
-                <div className="relative bg-slate-950 p-2 rounded-2xl border-2 border-slate-700 shadow-2xl flex items-center gap-2">
-                  <Car className="w-8 h-8 text-white" />
+                <div className="relative bg-slate-950 p-2.5 rounded-2xl border-2 border-slate-700 shadow-2xl flex items-center gap-2">
+                  <Car className="w-9 h-9 text-white" />
                   <div className="text-[10px] font-mono font-bold text-sky-400 pr-1">
                     MERCEDES-BENZ
                   </div>
                   {/* Glowing Headlight Beam */}
                   <div
-                    className="absolute -right-16 top-1/2 -translate-y-1/2 w-20 h-10 pointer-events-none"
+                    className="absolute -right-20 top-1/2 -translate-y-1/2 w-24 h-12 pointer-events-none"
                     style={{
-                      background: 'radial-gradient(ellipse at left, rgba(255, 255, 255, 0.8) 0%, rgba(56, 189, 248, 0.2) 70%, transparent 100%)'
+                      background: 'radial-gradient(ellipse at left, rgba(255, 255, 255, 0.9) 0%, rgba(56, 189, 248, 0.25) 70%, transparent 100%)'
                     }}
                   ></div>
                 </div>
@@ -929,9 +970,9 @@ export const AmbientLivingJourney: React.FC = () => {
               {/* ---------------------------------------------------------------
                   HEAVY MOTORIZED SLIDING VILLA ENTRANCE GATE
                   --------------------------------------------------------------- */}
-              <div className="absolute bottom-0 right-0 w-64 sm:w-80 h-36 border-t-2 border-slate-700 z-30 pointer-events-none overflow-hidden">
+              <div className="absolute bottom-0 right-0 w-64 sm:w-84 h-38 border-t-2 border-slate-700 z-30 pointer-events-none overflow-hidden">
                 {/* Yellow Safety Warning Flasher Light on Gate Pillar */}
-                <div className="absolute top-2 right-4 flex items-center gap-1.5 z-40 bg-slate-950/90 border border-slate-700 px-2 py-0.5 rounded-lg">
+                <div className="absolute top-2 right-4 flex items-center gap-1.5 z-40 bg-slate-950/90 border border-slate-700 px-2 py-0.5 rounded-lg shadow-xl">
                   <div
                     className={`w-3 h-3 rounded-full ${
                       carDepartureState === 'opening_gate' || carDepartureState === 'car_moving' || carDepartureState === 'closing_gate'
@@ -961,7 +1002,7 @@ export const AmbientLivingJourney: React.FC = () => {
                   }}
                 >
                   {/* Vertical Steel Bars */}
-                  {[...Array(10)].map((_, i) => (
+                  {[...Array(11)].map((_, i) => (
                     <div key={i} className="w-1.5 h-full bg-stone-700 border-x border-stone-950"></div>
                   ))}
                 </div>
@@ -1049,7 +1090,7 @@ export const AmbientLivingJourney: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 2. DIRECT EXTERIOR TOGGLES */}
+                {/* 2. DIRECT EXTERIOR HARDWARE TILES */}
                 <div className="space-y-3">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
                     Landscape & Garage Hardware
