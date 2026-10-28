@@ -157,7 +157,7 @@ export const HomePage: React.FC = () => {
               One Touch Transforms Your Home
             </h2>
             <p className="text-sm sm:text-base text-slate-300 font-light leading-relaxed">
-              Experience seamless scene orchestration. Tap modes on the virtual smartphone controller to witness how lights dim, motorized blinds adjust, and automated gates slide effortlessly.
+              Experience photorealistic architectural space orchestration in the signature eGlu style. Scrub through smooth sequence frames, switch room perspectives, and modulate motorized curtains, multi-tier cove lighting, and climate comfort in real time.
             </p>
           </div>
 
